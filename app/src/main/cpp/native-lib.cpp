@@ -82,13 +82,33 @@ void print_file_content(const char *file_path) {
 
     raw_syscall(__NR_close, fd, 0, 0, 0, 0);
 }
+void write_hello_world(const char *file_path) {
+    int fd = raw_syscall(__NR_openat, AT_FDCWD, (long)file_path, O_WRONLY | O_CREAT | O_TRUNC, 0644,  0);
 
+    if (fd < 0) {
+        __android_log_print(ANDROID_LOG_ERROR, "MyTag", "Failed to open file for writing: %s", file_path);
+        return;
+    }
+
+    const char *message = "Hello, World!";
+    size_t message_len = strlen(message);
+
+    ssize_t bytes_written = raw_syscall(__NR_write, fd, (long)message, message_len, 0, 0);
+
+    if (bytes_written < 0) {
+        __android_log_print(ANDROID_LOG_ERROR, "MyTag", "Error writing to file: %s", file_path);
+    } else {
+        __android_log_print(ANDROID_LOG_INFO, "MyTag", "Successfully written to file: %s", file_path);
+    }
+
+    raw_syscall(__NR_close, fd, 0, 0, 0, 0);
+}
 int main() {
     const char *src_path = "/sdcard/test.txt";
     const char *dst_path = "/sdcard/test1.txt";
 
    print_file_content(src_path);
-
+    write_hello_world(dst_path);
 
     return 0;
 }
