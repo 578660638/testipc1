@@ -6,7 +6,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <stdlib.h>
 #include <syscall.h>
 #include "syscall.h"
 #include <asm/fcntl.h>
@@ -257,9 +256,8 @@ int trace_current_process(int sdkVersion) {
     Tracer *first = get_tracer(nullptr, mainProcessPid, true);
 
     if (child == 0) {
-        // attch main pid
-        __android_log_print(ANDROID_LOG_ERROR, "MyTag", "child == 0 mainProcessPid %d",mainProcessPid);
-        __android_log_print(ANDROID_LOG_ERROR, "MyTag", "child == 0 getpid %d",getpid());
+
+
         int status = ptrace(PTRACE_ATTACH, mainProcessPid, NULL, NULL);
         if (status != 0) {
             //attch失败
