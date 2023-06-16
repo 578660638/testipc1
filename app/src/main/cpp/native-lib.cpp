@@ -68,7 +68,7 @@ int antidebug() {
 
     } else if (pid > 0) {
         // 父进程
-        __android_log_print(ANDROID_LOG_INFO, APPNAME, "父进程, PID: %d", getpid());
+
         int result = fibonacci(10);
         __android_log_print(ANDROID_LOG_INFO, APPNAME, "父进程计算结果: %d", result);
         int status;
